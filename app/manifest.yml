@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Rollout
 metadata:
   name: demo-app
   namespace: default
@@ -27,8 +27,24 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-      app: demo-app
+      app: demo-app-active
   ports:
     - name: http
       port: 80
       targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+      app: demo-app-preview
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+
+
