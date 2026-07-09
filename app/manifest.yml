@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: demo-app
@@ -18,16 +18,21 @@ spec:
           image: nginx:1.27
           ports:
             - containerPort: 80
+strategy:
+  blueGreen:
+    activeService: demo-app-active
+    previewService: demo-app-preview
+    autoPromotionEnabled: false
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-app
+  name: demo-app-active
   namespace: default
 spec:
   type: ClusterIP
   selector:
-      app: demo-app-active
+    app: demo-app
   ports:
     - name: http
       port: 80
@@ -36,12 +41,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-app
+  name: demo-app-preview
   namespace: default
 spec:
   type: ClusterIP
   selector:
-      app: demo-app-preview
+    app: demo-app
   ports:
     - name: http
       port: 80
