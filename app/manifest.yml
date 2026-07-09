@@ -18,11 +18,11 @@ spec:
           image: nginx:1.27
           ports:
             - containerPort: 80
-strategy:
-  blueGreen:
-    activeService: demo-app-active
-    previewService: demo-app-preview
-    autoPromotionEnabled: false
+  strategy:
+    blueGreen:
+      activeService: demo-app-active
+      previewService: demo-app-preview
+      autoPromotionEnabled: false
 ---
 apiVersion: v1
 kind: Service
